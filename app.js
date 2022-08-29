@@ -30,14 +30,14 @@ app.get('/about', (req, res) => {
 });
 
 //------------- Blog Routes  ---------------
-//get blogs
+//get blogs (render the index page)
 app.get('/blogs', (req, res) => {
     Blog.find().sort({ createdAt: -1 })
      .then((result) => res.render('index', {title: 'All Blogs', blogs: result}))
      .catch((err) => console.log(err))
 })
 
-//Blog create post API call
+//Blog create post API call (Save form data in db)
 app.post('/blogs', (req, res) => {
     const blog = new Blog(req.body);
 
@@ -46,7 +46,25 @@ app.post('/blogs', (req, res) => {
     .catch((err) => console.log(err))
 })
 
-//Blog Create form render
+//get API (render the details page based on params id)
+app.get('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+
+    Blog.findById(id)
+     .then((result) => res.render('details', {title: 'Blog Details', blog: result}))
+     .catch((err) => console.log(err))
+})
+
+//delete API handler
+app.delete('/blogs/:id', (req, res) => {
+    const id = req.params.id;
+
+    Blog.findByIdAndDelete(id)
+     .then((result) => res.json({ redirect: '/blogs' }))
+     .catch((err) => console.log(err))
+})
+
+//Blog Create form render (render the create form)
 app.get('/blogs/create', (req, res) => {
     res.render('create', {title: 'Create a new Blog'});
 })
