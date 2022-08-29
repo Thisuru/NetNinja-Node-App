@@ -7,7 +7,7 @@ const Blog = require('./models/blog');
 const app = express();
 
 //Connect to mongodb
-const dbURI = 'URL';
+const dbURI = 'mongodb+srv://netninja:test1234@nodeblogapp.e9ereru.mongodb.net/note-tuts?retryWrites=true&w=majority';
 mongoose.connect(dbURI)
     .then((result) => app.listen(3000))
     .catch((err) => console.log(err));
@@ -30,6 +30,11 @@ app.get('/about', (req, res) => {
 });
 
 //------------- Blog Routes  ---------------
+//Blog Create form render (render the create form)
+app.get('/blogs/create', (req, res) => {
+    res.render('create', {title: 'Create a new Blog'});
+})
+
 //get blogs (render the index page)
 app.get('/blogs', (req, res) => {
     Blog.find().sort({ createdAt: -1 })
@@ -62,11 +67,6 @@ app.delete('/blogs/:id', (req, res) => {
     Blog.findByIdAndDelete(id)
      .then((result) => res.json({ redirect: '/blogs' }))
      .catch((err) => console.log(err))
-})
-
-//Blog Create form render (render the create form)
-app.get('/blogs/create', (req, res) => {
-    res.render('create', {title: 'Create a new Blog'});
 })
 
 //404 page
