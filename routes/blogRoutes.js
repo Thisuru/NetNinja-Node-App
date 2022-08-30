@@ -3,19 +3,19 @@ const router = express.Router();
 const Blog = require('../models/blog');
 
 //Blog Create form render (render the create form)
-router.get('/blogs/create', (req, res) => {
+router.get('/create', (req, res) => {
     res.render('create', {title: 'Create a new Blog'});
 })
 
 //get blogs (render the index page)
-router.get('/blogs', (req, res) => {
+router.get('/', (req, res) => {
     Blog.find().sort({ createdAt: -1 })
      .then((result) => res.render('index', {title: 'All Blogs', blogs: result}))
      .catch((err) => console.log(err))
 })
 
 //Blog create post API call (Save form data in db)
-router.post('/blogs', (req, res) => {
+router.post('/', (req, res) => {
     const blog = new Blog(req.body);
 
     blog.save()
@@ -24,7 +24,7 @@ router.post('/blogs', (req, res) => {
 })
 
 //get API (render the details page based on params id)
-router.get('/blogs/:id', (req, res) => {
+router.get('/:id', (req, res) => {
     const id = req.params.id;
 
     Blog.findById(id)
@@ -33,7 +33,7 @@ router.get('/blogs/:id', (req, res) => {
 })
 
 //delete API handler
-router.delete('/blogs/:id', (req, res) => {
+router.delete('/:id', (req, res) => {
     const id = req.params.id;
 
     Blog.findByIdAndDelete(id)
