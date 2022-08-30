@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan'); 
 const mongoose = require('mongoose');
-const Blog = require('./models/blog');
+const blogRouters = require('./routes/blogRoutes');
 
 //express app
 const app = express();
@@ -29,45 +29,8 @@ app.get('/about', (req, res) => {
     res.render('about', {title: 'About'});
 });
 
-//------------- Blog Routes  ---------------
-//Blog Create form render (render the create form)
-app.get('/blogs/create', (req, res) => {
-    res.render('create', {title: 'Create a new Blog'});
-})
-
-//get blogs (render the index page)
-app.get('/blogs', (req, res) => {
-    Blog.find().sort({ createdAt: -1 })
-     .then((result) => res.render('index', {title: 'All Blogs', blogs: result}))
-     .catch((err) => console.log(err))
-})
-
-//Blog create post API call (Save form data in db)
-app.post('/blogs', (req, res) => {
-    const blog = new Blog(req.body);
-
-    blog.save()
-    .then((result) => res.redirect('/blogs'))
-    .catch((err) => console.log(err))
-})
-
-//get API (render the details page based on params id)
-app.get('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-
-    Blog.findById(id)
-     .then((result) => res.render('details', {title: 'Blog Details', blog: result}))
-     .catch((err) => console.log(err))
-})
-
-//delete API handler
-app.delete('/blogs/:id', (req, res) => {
-    const id = req.params.id;
-
-    Blog.findByIdAndDelete(id)
-     .then((result) => res.json({ redirect: '/blogs' }))
-     .catch((err) => console.log(err))
-})
+//------------- blog routes ---------------
+app.use(blogRouters);
 
 //404 page
 app.use((req, res) => {
