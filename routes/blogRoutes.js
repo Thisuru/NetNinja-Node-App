@@ -14,6 +14,16 @@ router.get('/', (req, res) => {
      .catch((err) => console.log(err))
 })
 
+// router.get('/', async (req, res) => {
+
+//     try {
+//         const resu = await Blog.find()
+//         res.render('index', {title: 'All Blogs', blogs: resu})
+//     } catch (error) {
+//         console.log(error);
+//     }
+// })
+
 //Blog create post API call (Save form data in db)
 router.post('/', (req, res) => {
     const blog = new Blog(req.body);

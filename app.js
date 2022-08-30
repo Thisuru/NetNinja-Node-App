@@ -3,13 +3,18 @@ const morgan = require('morgan');
 const mongoose = require('mongoose');
 const blogRouters = require('./routes/blogRoutes');
 
+//Environment Variable
+require('dotenv').config()
+
 //express app
 const app = express();
 
 //Connect to mongodb
-const dbURI = 'URL';
+const dbURI = process.env.DBURI
+const port = process.env.PORT
+
 mongoose.connect(dbURI)
-    .then((result) => app.listen(3000))
+    .then((result) => app.listen(port))
     .catch((err) => console.log(err));
 
 // register view engine
